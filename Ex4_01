@@ -1,0 +1,257 @@
+
+R version 4.4.1 (2024-06-14 ucrt) -- "Race for Your Life"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> save.image("C:\\Users\\srmve\\OneDrive\\Documents\\EX4_1")
+> #Read the CSV file
+> data<-read.csv("C:\\Users\\srmve\\OneDrive\\Documents\\ABARNA\\DEV LAB\\DEV Dataset\\Fruits\\Fruit Sales Data.csv")
+> data
+   Fruit.Name Weight.in.Kg Total.Cost Purchased
+1       Apple           44      72000        No
+2       Mango           27      48000       Yes
+3      Orange           30      54000        No
+4  Strawberry           38      61000        No
+5      Orange           40         NA       Yes
+6       Mango           35      58000       Yes
+7       Apple           NA      52000        No
+8  Strawberry           48      79000       Yes
+9  Strawberry           50      83000        No
+10      Apple           37      67000       Yes
+11     Orange           47      63000        No
+12      Mango           39         NA       Yes
+13      Mango           46      76000        No
+14     Orange           29      34000        No
+15 Strawberry           NA      38500       Yes
+16      Apple           24      38000       Yes
+> #Display the first few rows of the data
+> head(data)
+  Fruit.Name Weight.in.Kg Total.Cost Purchased
+1      Apple           44      72000        No
+2      Mango           27      48000       Yes
+3     Orange           30      54000        No
+4 Strawberry           38      61000        No
+5     Orange           40         NA       Yes
+6      Mango           35      58000       Yes
+> #Display the last few rows of the data
+> tail(data)
+   Fruit.Name Weight.in.Kg Total.Cost Purchased
+11     Orange           47      63000        No
+12      Mango           39         NA       Yes
+13      Mango           46      76000        No
+14     Orange           29      34000        No
+15 Strawberry           NA      38500       Yes
+16      Apple           24      38000       Yes
+> #Display the summary statistics of the data
+> summary(data)
+  Fruit.Name         Weight.in.Kg     Total.Cost     Purchased        
+ Length:16          Min.   :24.00   Min.   :34000   Length:16         
+ Class :character   1st Qu.:31.25   1st Qu.:49000   Class :character  
+ Mode  :character   Median :38.50   Median :59500   Mode  :character  
+                    Mean   :38.14   Mean   :58821                     
+                    3rd Qu.:45.50   3rd Qu.:70750                     
+                    Max.   :50.00   Max.   :83000                     
+                    NA's   :2       NA's   :2                         
+> #Display the information of the data
+> str(data)
+'data.frame':   16 obs. of  4 variables:
+ $ Fruit.Name  : chr  "Apple" "Mango" "Orange" "Strawberry" ...
+ $ Weight.in.Kg: int  44 27 30 38 40 35 NA 48 50 37 ...
+ $ Total.Cost  : int  72000 48000 54000 61000 NA 58000 52000 79000 83000 67000 ...
+ $ Purchased   : chr  "No" "Yes" "No" "No" ...
+> #Check for missing values
+> sapply(data, function(x) sum(is.na(x)))
+  Fruit.Name Weight.in.Kg   Total.Cost    Purchased 
+           0            2            2            0 
+> #Replace NaN rows and columns
+> data$Weight.in.Kg[is.na(data$Weight.in.Kg)] <- mean(data$Weight.in.Kg, na.rm = TRUE)
+> data$Weight.in.Kg[is.na(data$Weight.in.Kg)]
+numeric(0)
+> data$Weight.in.Kg
+ [1] 44.00000 27.00000 30.00000 38.00000 40.00000 35.00000 38.14286 48.00000
+ [9] 50.00000 37.00000 47.00000 39.00000 46.00000 29.00000 38.14286 24.00000
+> data$Total.Cost[is.na(data$Total.Cost)] <- mean(data$Total.Cost, na.rm = TRUE)
+> data$Total.Cost[is.na(data$Total.Cost)] 
+numeric(0)
+> data$Total.Cost
+ [1] 72000.00 48000.00 54000.00 61000.00 58821.43 58000.00 52000.00 79000.00
+ [9] 83000.00 67000.00 63000.00 58821.43 76000.00 34000.00 38500.00 38000.00
+> #Remove duplicate rows
+> data <- data[!duplicated(data), ]
+> data
+   Fruit.Name Weight.in.Kg Total.Cost Purchased
+1       Apple     44.00000   72000.00        No
+2       Mango     27.00000   48000.00       Yes
+3      Orange     30.00000   54000.00        No
+4  Strawberry     38.00000   61000.00        No
+5      Orange     40.00000   58821.43       Yes
+6       Mango     35.00000   58000.00       Yes
+7       Apple     38.14286   52000.00        No
+8  Strawberry     48.00000   79000.00       Yes
+9  Strawberry     50.00000   83000.00        No
+10      Apple     37.00000   67000.00       Yes
+11     Orange     47.00000   63000.00        No
+12      Mango     39.00000   58821.43       Yes
+13      Mango     46.00000   76000.00        No
+14     Orange     29.00000   34000.00        No
+15 Strawberry     38.14286   38500.00       Yes
+16      Apple     24.00000   38000.00       Yes
+> #Filter specific rows
+> data[data$Weight.in.Kg > 40, ]
+   Fruit.Name Weight.in.Kg Total.Cost Purchased
+1       Apple           44      72000        No
+8  Strawberry           48      79000       Yes
+9  Strawberry           50      83000        No
+11     Orange           47      63000        No
+13      Mango           46      76000        No
+> #Filter specific rows by AND condition
+> data[data$Weight.in.Kg > 40 & data$Total.Cost > 60000, ]
+   Fruit.Name Weight.in.Kg Total.Cost Purchased
+1       Apple           44      72000        No
+8  Strawberry           48      79000       Yes
+9  Strawberry           50      83000        No
+11     Orange           47      63000        No
+13      Mango           46      76000        No
+> #Filter specific rows by OR condition
+> data[data$Weight.in.Kg > 40 | data$Total.Cost > 60000, ]
+   Fruit.Name Weight.in.Kg Total.Cost Purchased
+1       Apple           44      72000        No
+4  Strawberry           38      61000        No
+8  Strawberry           48      79000       Yes
+9  Strawberry           50      83000        No
+10      Apple           37      67000       Yes
+11     Orange           47      63000        No
+13      Mango           46      76000        No
+> #Filter specific columns
+> data[, c("Weight.in.Kg", "Total.Cost")]
+   Weight.in.Kg Total.Cost
+1      44.00000   72000.00
+2      27.00000   48000.00
+3      30.00000   54000.00
+4      38.00000   61000.00
+5      40.00000   58821.43
+6      35.00000   58000.00
+7      38.14286   52000.00
+8      48.00000   79000.00
+9      50.00000   83000.00
+10     37.00000   67000.00
+11     47.00000   63000.00
+12     39.00000   58821.43
+13     46.00000   76000.00
+14     29.00000   34000.00
+15     38.14286   38500.00
+16     24.00000   38000.00
+> #Filter specific rows
+> #That has outliers
+> #Use boxplot for identify the outliers
+> outliers_weight <- boxplot.stats(data$Weight.in.Kg)$out
+> outliers_weight 
+numeric(0)
+> outliers_cost <- boxplot.stats(data$Total.Cost)$out
+> outliers_cost 
+numeric(0)
+> #using quantile() identify the outliers
+> outliers_weight <- data[data$Weight.in.Kg < quantile(data$Weight.in.Kg, 0.25) - 1.5 * IQR(data$Weight.in.Kg) | data$Weight.in.Kg > quantile(data$Weight.in.Kg, 0.75) + 1.5 * IQR(data$Weight.in.Kg), ]
+> outliers_weight
+[1] Fruit.Name   Weight.in.Kg Total.Cost   Purchased   
+<0 rows> (or 0-length row.names)
+> outliers_cost <- data[data$Total.Cost < quantile(data$Total.Cost, 0.25) - 1.5 * IQR(data$Total.Cost) | data$Total.Cost > quantile(data$Total.Cost, 0.75) + 1.5 * IQR(data$Total.Cost), ]
+> outliers_cost <- data
+> outliers_cost 
+   Fruit.Name Weight.in.Kg Total.Cost Purchased
+1       Apple     44.00000   72000.00        No
+2       Mango     27.00000   48000.00       Yes
+3      Orange     30.00000   54000.00        No
+4  Strawberry     38.00000   61000.00        No
+5      Orange     40.00000   58821.43       Yes
+6       Mango     35.00000   58000.00       Yes
+7       Apple     38.14286   52000.00        No
+8  Strawberry     48.00000   79000.00       Yes
+9  Strawberry     50.00000   83000.00        No
+10      Apple     37.00000   67000.00       Yes
+11     Orange     47.00000   63000.00        No
+12      Mango     39.00000   58821.43       Yes
+13      Mango     46.00000   76000.00        No
+14     Orange     29.00000   34000.00        No
+15 Strawberry     38.14286   38500.00       Yes
+16      Apple     24.00000   38000.00       Yes
+> #Manually calculate the quantiles
+> q1_weight <- quantile(data$Weight.in.Kg, 0.25)
+> q3_weight <- quantile(data$Weight.in.Kg, 0.75)
+> iqr_weight <- q3_weight - q1_weight
+> q1_weight
+  25% 
+33.75 
+> q3_weight 
+ 75% 
+44.5 
+>  iqr_weight
+  75% 
+10.75 
+> #Calculate the quantiles of the Total Cost column
+> q1_cost <- quantile(data$Total.Cost, 0.25)
+> q3_cost <- quantile(data$Total.Cost, 0.75)
+> iqr_cost <- q3_cost - q1_cost
+> q1_cost
+  25% 
+51000 
+>  q3_cost
+  75% 
+68250 
+> iqr_cost
+  75% 
+17250 
+> #Identify outliers in the Weight in Kg column
+> outliers_weight <- data[data$Weight.in.Kg < (q1_weight - 1.5 * iqr_weight) | data$Weight.in.Kg > (q3_weight + 1.5 * iqr_weight), ]
+> outliers_weight 
+[1] Fruit.Name   Weight.in.Kg Total.Cost   Purchased   
+<0 rows> (or 0-length row.names)
+> #Identify outliers in the Total Cost column
+> outliers_cost <- data[data$Total.Cost < (q1_cost - 1.5 * iqr_cost) | data$Total.Cost > (q3_cost + 1.5 * iqr_cost), ]
+> outliers_cost
+[1] Fruit.Name   Weight.in.Kg Total.Cost   Purchased   
+<0 rows> (or 0-length row.names)
+> #Remove outliers from the dataset
+> data <- data[data$Weight.in.Kg >= (q1_weight - 1.5 * iqr_weight) & data$Weight.in.Kg <= (q3_weight + 1.5 * iqr_weight) & data$Total.Cost >= (q1_cost - 1.5 * iqr_cost) & data$Total.Cost <= (q3_cost + 1.5 * iqr_cost), ]
+> data
+   Fruit.Name Weight.in.Kg Total.Cost Purchased
+1       Apple     44.00000   72000.00        No
+2       Mango     27.00000   48000.00       Yes
+3      Orange     30.00000   54000.00        No
+4  Strawberry     38.00000   61000.00        No
+5      Orange     40.00000   58821.43       Yes
+6       Mango     35.00000   58000.00       Yes
+7       Apple     38.14286   52000.00        No
+8  Strawberry     48.00000   79000.00       Yes
+9  Strawberry     50.00000   83000.00        No
+10      Apple     37.00000   67000.00       Yes
+11     Orange     47.00000   63000.00        No
+12      Mango     39.00000   58821.43       Yes
+13      Mango     46.00000   76000.00        No
+14     Orange     29.00000   34000.00        No
+15 Strawberry     38.14286   38500.00       Yes
+16      Apple     24.00000   38000.00       Yes
+> # Visualize the data
+> barplot(data$Total.Cost, main = "Total Cost Distribution", xlab = "Total Cost", ylab = "Frequency")
+> boxplot(data$Total.Cost, main = "Total Cost Distribution", xlab = "Total Cost", ylab = "Frequency")
+> plot(data$Total.Cost, main = "Total Cost Distribution", xlab = "Total Cost", ylab = "Frequency")
+> plot(data$Total.Cost, main = "Total Cost Distribution", xlab = "Total Cost", ylab = "Frequency")
+> hist(data$Total.Cost, main = "Total Cost Distribution", xlab = "Total Cost", ylab = "Frequency")
+> save.image("C:\\Users\\srmve\\OneDrive\\Documents\\Ex4_001")
+> 

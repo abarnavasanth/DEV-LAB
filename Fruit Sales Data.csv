@@ -1,0 +1,17 @@
+Fruit Name,Weight in Kg,Total Cost,Purchased
+Apple,44,72000,No
+Mango,27,48000,Yes
+Orange,30,54000,No
+Strawberry,38,61000,No
+Orange,40,,Yes
+Mango,35,58000,Yes
+Apple,,52000,No
+Strawberry,48,79000,Yes
+Strawberry,50,83000,No
+Apple,37,67000,Yes
+Orange,47,63000,No
+Mango,39,,Yes
+Mango,46,76000,No
+Orange,29,34000,No
+Strawberry,,38500,Yes
+Apple,24,38000,Yes
